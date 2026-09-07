@@ -60,11 +60,16 @@ int main() {
 	}
     printf("Client connected\n");
 	
+    char buffer[1024];
     const char *response = "+PONG\r\n";
-	if (send(client_fd, response, strlen(response), 0) == -1) {
-		printf("Send failed: %s \n", strerror(errno));
-	}
-
+    while(1){
+        ssize_t bytes_read = recv(client_fd, buffer, sizeof(buffer), 0);
+        if(bytes_read <= 0) break;
+        if (send(client_fd, response, strlen(response), 0) == -1) {
+		    printf("Send failed: %s \n", strerror(errno));
+	    }
+    }
+	
 	close(server_fd);
 
 	return 0;
